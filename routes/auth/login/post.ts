@@ -106,7 +106,7 @@ export default async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Invalid credentials' })
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password)
+    const isPasswordValid = await bcrypt.compare(password, user.password!)
 
     if (!isPasswordValid) {
       return res.status(400).json({ message: 'Invalid credentials' })
@@ -114,7 +114,14 @@ export default async (req: Request, res: Response) => {
 
     const expiresIn = rememberMe ? '7d' : '1h'
 
-    const token = jwt.sign({ id: user.id, role: user.role }, process.env.SECRET_KEY!, { expiresIn })
+    const token = jwt.sign({
+      id: user.id,
+      role: user.role,
+      name: user.name || '',
+      color: user.color
+    }, process.env.SECRET_KEY!, {
+      expiresIn
+    })
 
     res.json({ token })
   } catch (error) {

@@ -81,8 +81,10 @@ export default async (req: Request, res: Response) => {
       email: userData.email,
       name: userData.name,
       role: userData.role,
+      facebookId: userData.facebookId || null,
       createdAt: userData.createdAt,
-      updatedAt: userData.updatedAt
+      updatedAt: userData.updatedAt,
+      color: userData.color,
     });
   } catch (error) {
     console.error(error);

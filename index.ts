@@ -5,10 +5,14 @@ import cors from 'cors'
 import swaggerJSDoc from 'swagger-jsdoc'
 import swaggerUi from 'swagger-ui-express'
 import cookieParser from 'cookie-parser'
+import { createServer } from 'http'
 
 import { authMiddleware } from '@root/middleware/auth'
 
+import initSocket from './socketio-setup'
+
 const app = express()
+const httpServer = createServer(app)
 
 dotenv.config()
 
@@ -45,6 +49,10 @@ app.use(authMiddleware)
 app.use(nnn(nnnRouterOptions))
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs))
 
-app.listen(port, () => {
+const io = initSocket(httpServer)
+
+app.set('socketio', io)
+
+httpServer.listen(port, () => { 
   console.log(`Listening on port ${port} (http://localhost:${port})`)
 })

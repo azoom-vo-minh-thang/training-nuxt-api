@@ -4,6 +4,8 @@ import { z } from 'zod'
 
 import prisma from '@root/database'
 
+import { getRandomColor } from '@root/utils'
+
 const registerSchema = z.object({
   email: z.string().email({ message: 'Invalid email format' }),
   password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
@@ -110,7 +112,8 @@ export default async (req: Request, res: Response) => {
       data: {
         email,
         password: hashedPassword,
-        name
+        name,
+        color: getRandomColor()
       }
     })
 
